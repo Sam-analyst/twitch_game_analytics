@@ -21,6 +21,41 @@ TWITCH_API_ENDPOINTS = {
 # max attempts if api fails
 MAX_API_ATTEMPTS = 3
 
+def get_top_n_games_and_stats(
+        limit : int = 1,
+    ) -> pd.DataFrame:
+
+    # first get top n game ids
+    top_n_games_df = get_top_n_games(limit)
+
+    # change it to a list
+    game_ids_list = list(top_n_games_df["id"].values)
+
+    # for each game, pull approx current viewers + number of streamers
+    dfs = []
+    for game_id in game_ids_list:
+
+        streamers = get_game_viewers(game_id)
+
+        game_stats = (streamers
+                      .groupby("game_id")
+                      .agg(
+                          {"viewer_count" : "sum",
+                           "user_id" : "count"
+                           }
+                        )
+                      .reset_index()
+                      .rename(columns={"viewer_count" : "total_viewers",
+                                       "user_id" : "num_streamers"}
+                             )
+                      )
+        
+        dfs.append(game_stats)
+    
+    df = pd.concat(dfs).reset_index(drop=True)
+
+    return df
+
 def get_top_n_games(
         limit : int = 1,
     ) -> pd.DataFrame:
@@ -75,6 +110,10 @@ def get_game_viewers(
             break
 
         page_count += 1
+    
+    # raise an error if we actually hit 1K pages
+    if page_count == max_pages:
+        raise Exception(f"Max page count hit - please investigate game id {twitch_game_id}")
 
     df = pd.concat(streams_df_list)
 
