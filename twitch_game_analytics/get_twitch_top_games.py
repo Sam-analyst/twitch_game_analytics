@@ -55,10 +55,13 @@ def get_top_n_games_and_stats(
     
     df = pd.concat(dfs).reset_index(drop=True)
 
+    # convert viewer_count float to int
+    df["total_viewers"] = df["total_viewers"].astype(int)
+
     # adding in snapshot datetime
     snapshot_dt = datetime.now(timezone.utc)
     df["snapshot_datetime"] = snapshot_dt
-    df["snapshot_dt"] = snapshot_dt.date()
+    df["snapshot_dt"] = int(snapshot_dt.strftime("%Y%m%d")) # storing date as int in yyyymmdd format
 
     return df
 
