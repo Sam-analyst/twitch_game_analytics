@@ -30,7 +30,7 @@ def get_top_n_games_and_stats(
     top_n_games_df = get_top_n_games(limit)
 
     # change it to a list
-    game_ids_list = list(top_n_games_df["id"].values)
+    game_ids_list = list(top_n_games_df["game_id"].values)
 
     # for each game, pull approx current viewers + number of streamers
     dfs = []
@@ -76,6 +76,12 @@ def get_top_n_games(
     response_json = get_twitch_data("top_games", params)
 
     df = pd.DataFrame(response_json["data"])
+
+    # rename columns for consistency and clarity
+    df.rename(columns={
+        "id" : "game_id",
+        "name" : "game_name"
+    }, inplace=True)
 
     return df
     
