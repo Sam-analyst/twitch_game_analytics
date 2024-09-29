@@ -2,6 +2,7 @@ import os
 import requests
 import pandas as pd
 import time
+from datetime import datetime, timezone
 
 twitch_client_id = os.getenv("TWITCH_CLIENT_ID")
 twitch_access_token = os.getenv("TWITCH_ACCESS_TOKEN")
@@ -53,6 +54,11 @@ def get_top_n_games_and_stats(
         dfs.append(game_stats)
     
     df = pd.concat(dfs).reset_index(drop=True)
+
+    # adding in snapshot datetime
+    snapshot_dt = datetime.now(timezone.utc)
+    df["snapshot_datetime"] = snapshot_dt
+    df["snapshot_dt"] = snapshot_dt.date()
 
     return df
 
