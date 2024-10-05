@@ -1,8 +1,9 @@
 import os
-import requests
-import pandas as pd
 import time
 from datetime import datetime, timezone
+
+import pandas as pd
+import requests
 
 twitch_client_id = os.getenv("TWITCH_CLIENT_ID")
 twitch_access_token = os.getenv("TWITCH_ACCESS_TOKEN")
@@ -63,6 +64,9 @@ def get_top_n_games_and_stats(
     df["snapshot_datetime"] = snapshot_dt
     df["snapshot_dt"] = int(snapshot_dt.strftime("%Y%m%d")) # storing date as int in yyyymmdd format
 
+    # uppercase all columns, which is needed to write to snowflake
+    df.columns = df.columns.str.upper()
+
     return df
 
 def get_top_n_games(
@@ -85,6 +89,9 @@ def get_top_n_games(
         "id" : "game_id",
         "name" : "game_name"
     }, inplace=True)
+
+    # uppercase all columns, which is needed to write to snowflake
+    df.columns = df.columns.str.upper()
 
     return df
     
