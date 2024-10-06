@@ -1,6 +1,7 @@
 import os
 
 PROJECT_PARENT_DIRECTORY = "twitch_game_analytics"
+SQL_DIRECTORY = "sql"
 
 def read_sql_file(folder, file_name):
 
@@ -21,11 +22,11 @@ def find_sql_file(folder, file_name):
             parent_directory = os.path.dirname(current_directory)
 
             if os.path.basename(parent_directory) == PROJECT_PARENT_DIRECTORY:
-                file_path = os.path.join(parent_directory, "sql", "games_dim", "create_temp_games_dim.sql")
+                file_path = os.path.join(parent_directory, SQL_DIRECTORY, folder, file_name)
                 break
             
             else:
-                file_path = os.path.join(PROJECT_PARENT_DIRECTORY, *["sql", "games_dim", "create_temp_games_dim.sql"])
+                file_path = os.path.join(current_directory, SQL_DIRECTORY, folder, file_name)
                 break
         
         else:
