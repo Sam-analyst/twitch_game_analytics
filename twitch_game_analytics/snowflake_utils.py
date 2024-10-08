@@ -1,6 +1,7 @@
 import snowflake.connector
 from snowflake.connector.pandas_tools import write_pandas
 
+
 class SnowflakeConnection:
     def __init__(self, username, password, account, warehouse, database, schema):
         """Initialize the SnowflakeConnection object with necessary parameters"""
@@ -43,13 +44,13 @@ class SnowflakeExecutor:
         with self.conn.cursor() as cursor:
             cursor.execute(sql)
 
-    def write_pandas_df(self, df, table_name):
+    def write_pandas_df(self, df, table_name, **kwargs):
         """Method to insert pandas df into table name"""
 
         # upper case table name in case lower was provided
         table_name = table_name.upper()
 
-        success, nchunks, nrows, _ = write_pandas(self.conn, df, table_name)
+        success, nchunks, nrows, _ = write_pandas(self.conn, df, table_name, **kwargs)
         if success:
             print(f"Sucessfully inserted {nrows} rows into {table_name}")
         else:
