@@ -62,7 +62,6 @@ def get_top_n_games_and_stats(
     # adding in snapshot datetime
     snapshot_dt = datetime.now(timezone.utc)
     df["snapshot_datetime"] = snapshot_dt
-    df["snapshot_dt"] = int(snapshot_dt.strftime("%Y%m%d")) # storing date as int in yyyymmdd format
 
     # uppercase all columns, which is needed to write to snowflake
     df.columns = df.columns.str.upper()
