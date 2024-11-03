@@ -66,7 +66,10 @@ def get_top_n_games_and_stats(
     # uppercase all columns, which is needed to write to snowflake
     df.columns = df.columns.str.upper()
 
-    return df
+    return {
+        "games_dim" : top_n_games_df,
+        "game_stats" : df
+    }
 
 def get_top_n_games(
         limit : int = 1,
