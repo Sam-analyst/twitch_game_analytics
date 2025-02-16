@@ -1,2 +1,1 @@
-from twitch_game_analytics.get_twitch_top_games import (
-    get_game_viewers, get_top_n_games, get_top_n_games_and_stats)
+from .twitch import get_twitch_games_and_streams
